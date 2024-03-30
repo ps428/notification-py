@@ -21,8 +21,7 @@ class DiscordCreds(BaseModel):
 
 
 class SlackCreds(BaseModel):
-    token: str
-    channel_id: str
+    webhook_url: str
 
 
 class Creds(BaseModel):
