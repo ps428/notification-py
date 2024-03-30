@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional, Literal
 
 ServicesLiteral = Literal["all", "discord", "slack", "email"]
+SeverityLiteral = Literal[0, 1, 2, 3, 4]
 
 
 class EMail(BaseModel):
@@ -33,15 +34,19 @@ class Creds(BaseModel):
     email: Optional[EMail] = None
 
 
-class Message(BaseModel):
+class MessageDetails(BaseModel):
     title: str
-    message: str
+    text: str
+    severity: SeverityLiteral
     source: str
-    severity: int
     filename: str
     line_number: int
     time: datetime
-    target_services: Optional[ServicesLiteral] = "all"
+
+
+class Message(BaseModel):
+    message_details: MessageDetails
+    targeted_services: Optional[ServicesLiteral] = "all"
     creds: Optional[Creds] = None
 
 

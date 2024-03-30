@@ -13,20 +13,20 @@ channel_id = os.getenv("DISCORD_CHANNEL_ID")
 team_id = os.getenv("DISCORD_TEAM_ID")
 
 
-# Example usage
 message = Message(
-    title="Error",
-    message="An error occurred.",
-    source="Application",
-    severity=16711680,  # Red color
-    filename="main.py",
-    line_number=42,
-    time=datetime.now(),
+    message_details={
+        "title": "Test Title",
+        "text": "Test Text",
+        "severity": 2,
+        "source": "Test Source",
+        "filename": "Test Filename",
+        "line_number": 0,
+        "time": datetime.now(),
+    },
     creds=Creds(
         discord=DiscordCreds(
             token=bot_token, channel_id=channel_id, team_id=team_id
         )  # noqa
     ),
 )
-
 asyncio.run(send_message_to_discord(message))
