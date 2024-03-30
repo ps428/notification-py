@@ -38,4 +38,4 @@ message = Message(
     ),
 )
 
-send_email(message)
+asyncio.run(send_email(message))

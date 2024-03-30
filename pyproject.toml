@@ -15,6 +15,7 @@ pydantic = "^2.6.4"
 aiohttp = "^3.9.3"
 asyncio = "^3.4.3"
 python-dotenv = "^1.0.1"
+aiosmtplib = "^3.0.1"
 
 
 [build-system]
