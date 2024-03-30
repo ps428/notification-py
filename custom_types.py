@@ -6,14 +6,11 @@ ServicesLiteral = Literal["all", "discord", "slack", "email"]
 SeverityLiteral = Literal[0, 1, 2, 3, 4]
 
 
-class EMail(BaseModel):
+class EmailCreds(BaseModel):
     email: str
     password: str
     smtp_server: str
     smtp_port: int
-    imap_server: str
-    imap_port: int
-    imap_folder: str
     target_email: str
 
 
@@ -31,7 +28,7 @@ class SlackCreds(BaseModel):
 class Creds(BaseModel):
     discord: Optional[DiscordCreds] = None
     slack: Optional[SlackCreds] = None
-    email: Optional[EMail] = None
+    email: Optional[EmailCreds] = None
 
 
 class MessageDetails(BaseModel):
