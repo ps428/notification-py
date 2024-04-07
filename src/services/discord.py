@@ -6,8 +6,6 @@ from custom_types import (
     SeverityLiteral,
 )
 
-# from print_position import print_pos_time as print
-
 
 async def send_message_to_discord(message: Message) -> BasicAPIResponse:
     try:
@@ -115,7 +113,7 @@ def _update_message(message: Message) -> Message:
     if not message.creds.discord:
         raise ValueError("Discord credentials not provided.")
     message.message_details.text = (
-        f"<@{message.creds.discord.team_id}>,\n{message.message_details.text}"
+        f"<@&{message.creds.discord.team_id}>,\n{message.message_details.text}"
     )
 
     return message

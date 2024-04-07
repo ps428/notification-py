@@ -48,3 +48,9 @@ class BasicAPIResponse(BaseModel):
     success: bool
     error: Optional[str] = None
     message: Optional[str] = None
+
+
+class NotificationResponse(BasicAPIResponse):
+    slack: Optional[BasicAPIResponse] = None
+    discord: Optional[BasicAPIResponse] = None
+    email: Optional[BasicAPIResponse] = None

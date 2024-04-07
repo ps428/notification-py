@@ -1,34 +1,44 @@
-from custom_types import Message, BasicAPIResponse
-from print_position import print_pos_time as print
+from custom_types import Message, NotificationResponse
+
+from src.services.slack import send_message_to_slack
+from src.services.discord import send_message_to_discord
+from src.services.email import send_email
 
 
-async def send_notification(message: Message) -> BasicAPIResponse:
+async def send_notification(message: Message) -> NotificationResponse:
     try:
         # TODO
         print("Sending notification...")
-        target_services = message.target_services
-        # Send the message to all services
-        if target_services == "all":
-            # Send the message to Discord
-            # Send the message to Slack
-            # Send the message to Email
-            pass
+        result_slack = None
+        result_discord = None
+        result_email = None
 
-        # Send the message to Discord
-        elif target_services == "discord":
-            pass
+        if message.creds.slack:
 
-        # Send the message to Slack
-        elif target_services == "slack":
-            pass
+            result_slack = await send_message_to_slack(message)
+            if not result_slack.success:
+                raise ValueError(result_slack.error)
 
-        # Send the message to Email
-        elif target_services == "email":
-            pass
+        if message.creds.discord:
+
+            result_discord = await send_message_to_discord(message)
+            if not result_discord.success:
+                raise ValueError(result_discord.error)
+
+        if message.creds.email:
+
+            result_email = await send_email(message)
+            if not result_email.success:
+                raise ValueError(result_email.error)
 
         # Send the response
-        return BasicAPIResponse(
-            success=True, message="Message sent successfully!", error=None
+        return NotificationResponse(
+            success=True,
+            message="Message sent successfully!",
+            error=None,
+            slack=result_slack,
+            discord=result_discord,
+            email=result_email,
         )
     except Exception as e:
         raise e

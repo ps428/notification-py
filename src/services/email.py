@@ -3,8 +3,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from custom_types import BasicAPIResponse, Message
 
-# from print_position import print_pos_time as print
-
 
 async def send_email(message: Message) -> BasicAPIResponse:
     if message.creds is None or message.creds.email is None:

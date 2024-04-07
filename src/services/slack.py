@@ -1,8 +1,6 @@
 import aiohttp
 from custom_types import BasicAPIResponse, Message, SeverityLiteral
 
-# from print_position import print_pos_time as print
-
 
 async def send_message_to_slack(message: Message) -> BasicAPIResponse:
     try:
