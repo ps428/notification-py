@@ -9,6 +9,20 @@ packages = [
 {include = "custom_types.py"}
 ]
 
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.black]
+line-length = 79
+
+[tool.ruff]
+line-length = 79
+
+[tool.mypy]
+ignore_missing_imports = true
+
 [tool.poetry.dependencies]
 python = "^3.11"
 pydantic = "^2.6.4"
@@ -16,6 +30,17 @@ aiohttp = "^3.9.3"
 asyncio = "^3.4.3"
 python-dotenv = "^1.0.1"
 aiosmtplib = "^3.0.1"
+print-position = "^2.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
+black = "^23.12.1"
+flake8 = "^6.1.0"
+ruff = "^0.1.11"
+mypy = "^1.8.0"
+pytest = "^7.4.4"
+pytest-asyncio = "^0.23.3"
 
 
 [build-system]

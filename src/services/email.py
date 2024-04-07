@@ -1,15 +1,24 @@
 import aiosmtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from custom_types import Message
+from custom_types import BasicAPIResponse, Message
+
+# from print_position import print_pos_time as print
 
 
-async def send_email(message: Message):
+async def send_email(message: Message) -> BasicAPIResponse:
     if message.creds is None or message.creds.email is None:
         raise ValueError("Email credentials are missing.")
 
     message = _update_message(message)
     email_creds = message.creds.email
+    if not email_creds:
+        print("Email credentials not provided.")
+        return BasicAPIResponse(
+            success=False,
+            message=None,
+            error="Email credentials not provided",
+        )
 
     # Create a multipart message
     email_message = MIMEMultipart()
@@ -39,8 +48,12 @@ async def send_email(message: Message):
         await server.login(email_creds.email, email_creds.password)
         await server.send_message(email_message)
         print("Email sent successfully.")
+        return BasicAPIResponse(
+            success=True, message="Email sent successfully.", error=None
+        )
     except Exception as e:
         print(f"An error occurred while sending the email: {str(e)}")
+        return BasicAPIResponse(success=False, message=None, error=str(e))
 
 
 def _update_message(message: Message) -> Message:
@@ -49,5 +62,7 @@ def _update_message(message: Message) -> Message:
         f"{message.message_details.source} | "
         f"Severity: {message.message_details.severity}"
     )
+    if not message.creds.email:
+        raise ValueError("Email credentials not provided.")
     message.message_details.text = f"To: {message.creds.email.target_email}\n{message.message_details.text}"  # noqa
     return message

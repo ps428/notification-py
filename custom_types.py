@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional, Literal
 
-ServicesLiteral = Literal["all", "discord", "slack", "email"]
 SeverityLiteral = Literal[0, 1, 2, 3, 4]
 
 
@@ -25,9 +24,9 @@ class SlackCreds(BaseModel):
 
 
 class Creds(BaseModel):
-    discord: Optional[DiscordCreds] = None
-    slack: Optional[SlackCreds] = None
-    email: Optional[EmailCreds] = None
+    discord: Optional[DiscordCreds]
+    slack: Optional[SlackCreds]
+    email: Optional[EmailCreds]
 
 
 class MessageDetails(BaseModel):
@@ -42,8 +41,7 @@ class MessageDetails(BaseModel):
 
 class Message(BaseModel):
     message_details: MessageDetails
-    targeted_services: Optional[ServicesLiteral] = "all"
-    creds: Optional[Creds] = None
+    creds: Creds
 
 
 class BasicAPIResponse(BaseModel):

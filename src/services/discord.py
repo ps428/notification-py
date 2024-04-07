@@ -1,61 +1,109 @@
 import aiohttp
-from custom_types import Message
+from custom_types import (
+    DiscordCreds,
+    Message,
+    BasicAPIResponse,
+    SeverityLiteral,
+)
+
+# from print_position import print_pos_time as print
 
 
-async def send_message_to_discord(message: Message):
+async def send_message_to_discord(message: Message) -> BasicAPIResponse:
     try:
-        if message.creds and message.creds.discord:
-            message = _update_message(message)
-            url = (
-                f"https://discord.com/api/channels/"
-                f"{message.creds.discord.channel_id}/messages"
-            )
-            headers = {"Authorization": f"Bot {message.creds.discord.token}"}
-            data = {
-                "embeds": [
-                    {
-                        "title": message.message_details.title,
-                        "description": message.message_details.text,
-                        "color": message.message_details.severity,
-                        "fields": [
-                            {
-                                "name": "Error Source",
-                                "value": message.message_details.source,
-                            },
-                            {
-                                "name": "Filename",
-                                "value": message.message_details.filename,
-                            },
-                            {
-                                "name": "Line number",
-                                "value": str(
-                                    message.message_details.line_number
-                                ),  # noqa
-                            },
-                            {
-                                "name": "Time",
-                                "value": message.message_details.time.strftime(
-                                    "%Y-%m-%d %H:%M:%S"
+        if message.creds.discord is not None:
+            if isinstance(message.creds.discord, DiscordCreds):
+                message = _update_message(message)
+
+                if not message.creds.discord:
+                    print("Discord credentials not provided.")
+                    return BasicAPIResponse(
+                        success=False,
+                        message=None,
+                        error="Discord credentials not provided",
+                    )
+                url = (
+                    f"https://discord.com/api/channels/"
+                    f"{message.creds.discord.channel_id}/messages"
+                )
+                headers = {
+                    "Authorization": f"Bot {message.creds.discord.token}"
+                }
+                data = {
+                    "embeds": [
+                        {
+                            "title": message.message_details.title,
+                            "description": message.message_details.text,
+                            "color": _get_color_for_severity(
+                                message.message_details.severity
+                            ),
+                            "fields": [
+                                {
+                                    "name": "Error Source",
+                                    "value": message.message_details.source,
+                                },
+                                {
+                                    "name": "Filename",
+                                    "value": message.message_details.filename,
+                                },
+                                {
+                                    "name": "Line number",
+                                    "value": str(
+                                        message.message_details.line_number
+                                    ),  # noqa
+                                },
+                                {
+                                    "name": "Time",
+                                    "value": message.message_details.time.strftime(  # noqa
+                                        "%Y-%m-%d %H:%M:%S"
+                                    ),
+                                },
+                            ],
+                        }
+                    ]
+                }
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(
+                        url, json=data, headers=headers
+                    ) as response:  # noqa
+                        if response.status != 200:
+                            print(
+                                f"Failed to send message to Discord. "
+                                f"Status code: {response.status}"
+                            )
+                            return BasicAPIResponse(
+                                success=False,
+                                message=None,
+                                error=(
+                                    f"Failed to send message to Discord "
+                                    f"Status: {response.status}"
                                 ),
-                            },
-                        ],
-                    }
-                ]
-            }
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    url, json=data, headers=headers
-                ) as response:  # noqa
-                    if response.status != 200:
-                        print(
-                            f"Failed to send message to Discord. "
-                            f"Status code: {response.status}"
-                        )
+                            )
+                return BasicAPIResponse(
+                    success=True,
+                    message="Message sent successfully!",
+                    error=None,
+                )
+
         else:
             print("Discord credentials not provided.")
-            raise Exception("Discord credentials not provided.")
+            return BasicAPIResponse(
+                success=False,
+                message=None,
+                error="Discord credentials not provided",
+            )
     except Exception as e:
-        raise e
+        print(f"Failed to send message to Discord. Error: {e}")
+        return BasicAPIResponse(
+            success=False,
+            message=None,
+            error="Failed to send message to Discord",
+        )
+    return BasicAPIResponse(
+        success=False,
+        message=None,
+        error="Failed to send message to Discord",
+    )
 
 
 def _update_message(message: Message) -> Message:
@@ -64,16 +112,16 @@ def _update_message(message: Message) -> Message:
         f"{message.message_details.source} | "
         f"Severity: {message.message_details.severity}"
     )
+    if not message.creds.discord:
+        raise ValueError("Discord credentials not provided.")
     message.message_details.text = (
         f"<@{message.creds.discord.team_id}>,\n{message.message_details.text}"
     )
-    message.message_details.severity = _update_severity_color(
-        message.message_details.severity
-    )
+
     return message
 
 
-def _update_severity_color(severity: int) -> int:
+def _get_color_for_severity(severity: SeverityLiteral) -> int:
     if severity == 0:
         return 5763719
     elif severity == 1:

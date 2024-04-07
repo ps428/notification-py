@@ -1,11 +1,22 @@
 import aiohttp
-from custom_types import Message
+from custom_types import BasicAPIResponse, Message, SeverityLiteral
+
+# from print_position import print_pos_time as print
 
 
-async def send_message_to_slack(message: Message):
+async def send_message_to_slack(message: Message) -> BasicAPIResponse:
     try:
         if message.creds and message.creds.slack:
             message = _update_message_for_slack(message)
+
+            if not message.creds.slack:
+                print("Slack credentials not provided.")
+                return BasicAPIResponse(
+                    success=False,
+                    message=None,
+                    error="Slack credentials not provided",
+                )
+
             url = message.creds.slack.webhook_url
             headers = {"Content-type": "application/json"}
             data = {
@@ -51,11 +62,27 @@ async def send_message_to_slack(message: Message):
                             f"Failed to send message to Slack."
                             f" Status code: {response.status}"
                         )
+                        return BasicAPIResponse(
+                            success=False,
+                            message=None,
+                            error=(
+                                f"Failed to send message to Slack."
+                                f" Status: {response.status}"
+                            ),
+                        )
+            return BasicAPIResponse(success=True, message=None, error=None)
         else:
             print("Slack credentials not provided.")
-            raise Exception("Slack credentials not provided.")
+            return BasicAPIResponse(
+                success=False,
+                message=None,
+                error="Slack credentials not provided",
+            )
     except Exception as e:
-        raise e
+        print(
+            f"An error occurred while sending the message to Slack: {str(e)}"
+        )
+        return BasicAPIResponse(success=False, message=None, error=str(e))
 
 
 def _update_message_for_slack(message: Message) -> Message:
@@ -66,7 +93,7 @@ def _update_message_for_slack(message: Message) -> Message:
     return message
 
 
-def _get_color_for_severity(severity: int) -> str:
+def _get_color_for_severity(severity: SeverityLiteral) -> str:
     severity_colors = {
         0: "#00FF00",  # Green
         1: "#00FFFF",  # Cyan
