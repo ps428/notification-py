@@ -14,7 +14,6 @@ async def send_message_to_discord(message: Message) -> BasicAPIResponse:
                 message = _update_message(message)
 
                 if not message.creds.discord:
-                    print("Discord credentials not provided.")
                     return BasicAPIResponse(
                         success=False,
                         message=None,
@@ -65,10 +64,6 @@ async def send_message_to_discord(message: Message) -> BasicAPIResponse:
                         url, json=data, headers=headers
                     ) as response:  # noqa
                         if response.status != 200:
-                            print(
-                                f"Failed to send message to Discord. "
-                                f"Status code: {response.status}"
-                            )
                             return BasicAPIResponse(
                                 success=False,
                                 message=None,
@@ -84,18 +79,16 @@ async def send_message_to_discord(message: Message) -> BasicAPIResponse:
                 )
 
         else:
-            print("Discord credentials not provided.")
             return BasicAPIResponse(
                 success=False,
                 message=None,
                 error="Discord credentials not provided",
             )
     except Exception as e:
-        print(f"Failed to send message to Discord. Error: {e}")
         return BasicAPIResponse(
             success=False,
             message=None,
-            error="Failed to send message to Discord",
+            error=f"Failed to send message to Discord: {e}",
         )
     return BasicAPIResponse(
         success=False,

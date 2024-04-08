@@ -11,7 +11,6 @@ async def send_email(message: Message) -> BasicAPIResponse:
     message = _update_message(message)
     email_creds = message.creds.email
     if not email_creds:
-        print("Email credentials not provided.")
         return BasicAPIResponse(
             success=False,
             message=None,
@@ -45,12 +44,10 @@ async def send_email(message: Message) -> BasicAPIResponse:
         await server.connect()
         await server.login(email_creds.email, email_creds.password)
         await server.send_message(email_message)
-        print("Email sent successfully.")
         return BasicAPIResponse(
             success=True, message="Email sent successfully.", error=None
         )
     except Exception as e:
-        print(f"An error occurred while sending the email: {str(e)}")
         return BasicAPIResponse(success=False, message=None, error=str(e))
 
 

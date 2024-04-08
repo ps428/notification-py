@@ -7,8 +7,6 @@ from src.services.email import send_email
 
 async def send_notification(message: Message) -> NotificationResponse:
     try:
-        # TODO
-        print("Sending notification...")
         result_slack = None
         result_discord = None
         result_email = None

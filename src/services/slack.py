@@ -8,7 +8,6 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
             message = _update_message_for_slack(message)
 
             if not message.creds.slack:
-                print("Slack credentials not provided.")
                 return BasicAPIResponse(
                     success=False,
                     message=None,
@@ -56,10 +55,6 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
                     url, json=data, headers=headers
                 ) as response:  # noqa
                     if response.status != 200:
-                        print(
-                            f"Failed to send message to Slack."
-                            f" Status code: {response.status}"
-                        )
                         return BasicAPIResponse(
                             success=False,
                             message=None,
@@ -70,16 +65,12 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
                         )
             return BasicAPIResponse(success=True, message=None, error=None)
         else:
-            print("Slack credentials not provided.")
             return BasicAPIResponse(
                 success=False,
                 message=None,
                 error="Slack credentials not provided",
             )
     except Exception as e:
-        print(
-            f"An error occurred while sending the message to Slack: {str(e)}"
-        )
         return BasicAPIResponse(success=False, message=None, error=str(e))
 
 
