@@ -51,4 +51,11 @@ async def send_notification(message: Message) -> NotificationResponse:
             email=result_email,
         )
     except Exception as e:
-        raise e
+        return NotificationResponse(
+            success=False,
+            message="Error sending notification!",
+            error=str(e),
+            slack=None,
+            discord=None,
+            email=None,
+        )
