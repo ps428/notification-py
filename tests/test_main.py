@@ -73,3 +73,32 @@ async def test_notification():
     assert result.email is not None
     assert result.email.error is None
     assert result.email.success is True
+
+
+@pytest.mark.asyncio
+async def test_notification_failure():
+
+    message = Message(
+        message_details=MessageDetails(
+            title="Test Title",
+            text="Test Text",
+            severity=2,
+            source="Test Source",
+            filename="Test Filename",
+            line_number=0,
+            time=datetime.now(),
+        ),
+        creds=Creds(
+            discord=None,
+            slack=None,
+            email=None,
+        ),
+    )
+    result = await send_notification(message)
+    assert result.error == "No creds provided!"
+    assert result.success is False
+
+    assert result.discord is None
+
+    assert result.slack is None
+    assert result.email is None

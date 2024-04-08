@@ -31,6 +31,16 @@ async def send_notification(message: Message) -> NotificationResponse:
             if not result_email.success:
                 raise ValueError(result_email.error)
 
+        if not result_slack and not result_discord and not result_email:
+            return NotificationResponse(
+                success=False,
+                message="No message sent!",
+                error="No creds provided!",
+                slack=None,
+                discord=None,
+                email=None,
+            )
+
         # Send the response
         return NotificationResponse(
             success=True,
