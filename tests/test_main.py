@@ -1,6 +1,6 @@
 import pytest
-from src.main import send_notification
-from src.custom_types import (
+from notification_py.main import send_notification
+from notification_py.custom_types import (
     DiscordCreds,
     Message,
     Creds,

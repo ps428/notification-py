@@ -1,6 +1,11 @@
 import pytest
-from src.services.email import send_email
-from src.custom_types import Message, Creds, EmailCreds, MessageDetails
+from notification_py.services.email import send_email
+from notification_py.custom_types import (
+    Message,
+    Creds,
+    EmailCreds,
+    MessageDetails,
+)
 from datetime import datetime
 from dotenv import load_dotenv
 import os

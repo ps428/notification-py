@@ -1,5 +1,5 @@
 import aiohttp
-from src.custom_types import (
+from notification_py.custom_types import (
     DiscordCreds,
     Message,
     BasicAPIResponse,

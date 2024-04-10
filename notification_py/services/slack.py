@@ -1,5 +1,9 @@
 import aiohttp
-from src.custom_types import BasicAPIResponse, Message, SeverityLiteral
+from notification_py.custom_types import (
+    BasicAPIResponse,
+    Message,
+    SeverityLiteral,
+)
 
 
 async def send_message_to_slack(message: Message) -> BasicAPIResponse:

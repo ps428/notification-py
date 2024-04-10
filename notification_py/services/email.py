@@ -1,7 +1,7 @@
 import aiosmtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from src.custom_types import BasicAPIResponse, Message
+from notification_py.custom_types import BasicAPIResponse, Message
 
 
 async def send_email(message: Message) -> BasicAPIResponse:

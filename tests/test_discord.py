@@ -1,6 +1,11 @@
 import pytest
-from src.services.discord import send_message_to_discord
-from src.custom_types import Message, Creds, DiscordCreds, MessageDetails
+from notification_py.services.discord import send_message_to_discord
+from notification_py.custom_types import (
+    Message,
+    Creds,
+    DiscordCreds,
+    MessageDetails,
+)
 from datetime import datetime
 from dotenv import load_dotenv
 import os

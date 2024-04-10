@@ -1,8 +1,8 @@
-from src.custom_types import Message, NotificationResponse
+from notification_py.custom_types import Message, NotificationResponse
 
-from src.services.slack import send_message_to_slack
-from src.services.discord import send_message_to_discord
-from src.services.email import send_email
+from notification_py.services.slack import send_message_to_slack
+from notification_py.services.discord import send_message_to_discord
+from notification_py.services.email import send_email
 
 
 async def send_notification(message: Message) -> NotificationResponse:

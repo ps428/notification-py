@@ -1,29 +1,15 @@
 [tool.poetry]
-name = "notification-py"
-version = "1.0.0"
+name = "notification_py"
+version = "0.0.7"
 description = ""
 authors = ["Pranav Soni <pranav.bhawan@gmail.com>"]
 readme = "README.md"
 packages = [
-{include = "src"},
+{include = "notification_py"},
 ]
 
-
-[tool.isort]
-profile = "black"
-line_length = 79
-
-[tool.black]
-line-length = 79
-
-[tool.ruff]
-line-length = 79
-
-[tool.mypy]
-ignore_missing_imports = true
-
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.9"
 pydantic = "^2.6.4"
 aiohttp = "^3.9.3"
 asyncio = "^3.4.3"
@@ -45,3 +31,6 @@ pytest-asyncio = "^0.23.3"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+
