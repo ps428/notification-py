@@ -28,9 +28,10 @@ async def send_email(message: Message) -> BasicAPIResponse:
     body += f"Source: {message.message_details.source}\n"
     body += f"Filename: {message.message_details.filename}\n"
     body += f"Line Number: {message.message_details.line_number}\n"
+    body += f"Description: {message.message_details.text}\n"
     body += f"Time: {message.message_details.time}\n\n"
-    body += message.message_details.text
 
+    body += "------------"
     # Attach the body to the email message
     email_message.attach(MIMEText(body, "plain"))
 
@@ -59,5 +60,4 @@ def _update_message(message: Message) -> Message:
     )
     if not message.creds.email:
         raise ValueError("Email credentials not provided.")
-    message.message_details.text = f"To: {message.creds.email.target_email}\n{message.message_details.text}"  # noqa
     return message

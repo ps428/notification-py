@@ -1,4 +1,9 @@
-from notification_py.custom_types import Message, NotificationResponse
+import asyncio
+from notification_py.custom_types import (
+    Message,
+    NotificationResponse,
+    BasicAPIResponse,
+)
 
 from notification_py.services.slack import send_message_to_slack
 from notification_py.services.discord import send_message_to_discord
@@ -7,29 +12,21 @@ from notification_py.services.email import send_email
 
 async def send_notification(message: Message) -> NotificationResponse:
     try:
-        result_slack = None
-        result_discord = None
-        result_email = None
+        tasks = []
 
         if message.creds.slack:
-
-            result_slack = await send_message_to_slack(message)
-            if not result_slack.success:
-                raise ValueError(result_slack.error)
+            slack_message = message.copy(deep=True)
+            tasks.append(send_message_to_slack(slack_message))
 
         if message.creds.discord:
-
-            result_discord = await send_message_to_discord(message)
-            if not result_discord.success:
-                raise ValueError(result_discord.error)
+            discord_message = message.copy(deep=True)
+            tasks.append(send_message_to_discord(discord_message))
 
         if message.creds.email:
+            email_message = message.copy(deep=True)
+            tasks.append(send_email(email_message))
 
-            result_email = await send_email(message)
-            if not result_email.success:
-                raise ValueError(result_email.error)
-
-        if not result_slack and not result_discord and not result_email:
+        if not tasks:
             return NotificationResponse(
                 success=False,
                 message="No message sent!",
@@ -38,6 +35,25 @@ async def send_notification(message: Message) -> NotificationResponse:
                 discord=None,
                 email=None,
             )
+
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        result_slack = None
+        result_discord = None
+        result_email = None
+
+        for index, result in enumerate(results):
+            if isinstance(result, BasicAPIResponse):
+                if not result.success:
+                    raise ValueError(result.error)
+                if index == 0 and message.creds.slack:
+                    result_slack = result
+                elif index == 1 and message.creds.discord:
+                    result_discord = result
+                elif index == 2 and message.creds.email:
+                    result_email = result
+            elif isinstance(result, Exception):
+                raise result
 
         # Send the response
         return NotificationResponse(
