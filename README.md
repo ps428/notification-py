@@ -3,7 +3,8 @@
 
 
 ## Motivation
-Lately I noticed several critical errors poping up in my python hosted backend, I thought of a simple way to get notified about these failues (be it Stripe webhook failure or anything else). So I came up with this idea to create a simple notification package which can be imported and used when unexpected errors are thrown by code.
+Lately I noticed several critical errors poping up in my python backend, I thought of a simple way to get notified about these failues (be it Stripe webhooks or anything else). So I came up with this idea to create a simple notification package which can be imported and used when unexpected errors are thrown by code.
+
 > Using this package, developers can receive notifications through various combinations of Discord, Slack, and Email. The package supports sending notifications to all three platforms simultaneously, any two of them, or just one platform, depending on the provided credentials and configuration. This flexibility allows developers to customize their notification setup based on their specific requirements and preferences.
 
 
