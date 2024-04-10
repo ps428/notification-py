@@ -1,12 +1,13 @@
 [tool.poetry]
 name = "notification_py"
-version = "0.0.7"
-description = ""
+version = "0.0.9"
+description = "A simple package to send notifications on Discord, Slack and Email."
 authors = ["Pranav Soni <pranav.bhawan@gmail.com>"]
 readme = "README.md"
-packages = [
-{include = "notification_py"},
-]
+license = "Apache-2.0"
+repository = "https://github.com/ps428/notification_service/"
+packages = [{include = "notification_py"}]
+
 
 [tool.poetry.dependencies]
 python = "^3.9"
