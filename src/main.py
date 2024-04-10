@@ -1,4 +1,4 @@
-from custom_types import Message, NotificationResponse
+from src.custom_types import Message, NotificationResponse
 
 from src.services.slack import send_message_to_slack
 from src.services.discord import send_message_to_discord

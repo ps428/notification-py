@@ -1,6 +1,6 @@
 import pytest
 from src.services.slack import send_message_to_slack
-from custom_types import Message, Creds, SlackCreds, MessageDetails
+from src.custom_types import Message, Creds, SlackCreds, MessageDetails
 from datetime import datetime
 from dotenv import load_dotenv
 import os

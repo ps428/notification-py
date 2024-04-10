@@ -1,6 +1,6 @@
 import pytest
 from src.services.email import send_email
-from custom_types import Message, Creds, EmailCreds, MessageDetails
+from src.custom_types import Message, Creds, EmailCreds, MessageDetails
 from datetime import datetime
 from dotenv import load_dotenv
 import os

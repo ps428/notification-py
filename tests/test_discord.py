@@ -1,6 +1,6 @@
 import pytest
 from src.services.discord import send_message_to_discord
-from custom_types import Message, Creds, DiscordCreds, MessageDetails
+from src.custom_types import Message, Creds, DiscordCreds, MessageDetails
 from datetime import datetime
 from dotenv import load_dotenv
 import os

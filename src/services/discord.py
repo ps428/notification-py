@@ -1,5 +1,5 @@
 import aiohttp
-from custom_types import (
+from src.custom_types import (
     DiscordCreds,
     Message,
     BasicAPIResponse,

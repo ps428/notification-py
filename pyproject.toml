@@ -1,12 +1,11 @@
 [tool.poetry]
-name = "notification-service"
-version = "0.1.0"
+name = "notification-py"
+version = "1.0.0"
 description = ""
 authors = ["Pranav Soni <pranav.bhawan@gmail.com>"]
 readme = "README.md"
 packages = [
 {include = "src"},
-{include = "custom_types.py"}
 ]
 
 
