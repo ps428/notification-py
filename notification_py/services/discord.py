@@ -30,7 +30,10 @@ async def send_message_to_discord(message: Message) -> BasicAPIResponse:
                     "embeds": [
                         {
                             "title": message.message_details.title,
-                            "description": message.message_details.text,
+                            "description": (
+                                f"<@&{message.creds.discord.team_id}>,"
+                                f"\n{message.message_details.text}"
+                            ),
                             "color": _get_color_for_severity(
                                 message.message_details.severity
                             ),
@@ -101,13 +104,10 @@ def _update_message(message: Message) -> Message:
     message.message_details.title = (
         f"{message.message_details.title} - "
         f"{message.message_details.source} | "
-        f"Severity: {message.message_details.severity}"
+        f"Severity: {message.message_details.severity+1}"
     )
     if not message.creds.discord:
         raise ValueError("Discord credentials not provided.")
-    message.message_details.text = (
-        f"<@&{message.creds.discord.team_id}>,\n{message.message_details.text}"
-    )
 
     return message
 

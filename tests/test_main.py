@@ -34,12 +34,18 @@ async def test_notification():
 
     message = Message(
         message_details=MessageDetails(
-            title="Test Title",
-            text="Test Text",
-            severity=2,
-            source="Test Source",
-            filename="Test Filename",
-            line_number=0,
+            # title="All good",
+            # text="Sufficient amount of pizzas in stock.",
+            # severity=0,
+            # title="Low food",
+            # text="Only 10 pizzas left.",
+            # severity=2,
+            title="No Food!",
+            text="Pizza is out of stock. This is critical!",
+            severity=4,
+            source="Pizza Store",
+            filename="pizza.py",
+            line_number=23,
             time=datetime.now(),
         ),
         creds=Creds(

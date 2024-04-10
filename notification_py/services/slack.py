@@ -29,7 +29,7 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
                         ),
                         "pretext": message.message_details.title,
                         "title": message.message_details.source,
-                        "text": message.message_details.text,
+                        "text": f"<!channel>,\n{message.message_details.text}",
                         "fields": [
                             {
                                 "title": "Filename",
@@ -80,9 +80,8 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
 
 def _update_message_for_slack(message: Message) -> Message:
     message.message_details.title = (
-        f"New Alert - Severity: {message.message_details.severity}"
+        f"New Alert - Severity: {message.message_details.severity+1}"
     )
-    message.message_details.text = f"<!channel> {message.message_details.text}"
     return message
 
 

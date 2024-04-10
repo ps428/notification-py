@@ -129,8 +129,14 @@ target_email = "RECIPIENT_ID@gmail.com"
 
 ```
 
-## Sample notifications:
-sla
+## Sample notifications
+### 1. Discord
+![Sample Discord Notifications](./screenshots/discord.png)
+### 2. Slack
+![Sample Slack Notifications](./screenshots/slack.png)
+### 3. Email
+![Sample Email Notifications](./screenshots/email.png)
+
 
 # Contact me
 

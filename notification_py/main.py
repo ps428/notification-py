@@ -15,15 +15,15 @@ async def send_notification(message: Message) -> NotificationResponse:
         tasks = []
 
         if message.creds.slack:
-            slack_message = message.copy(deep=True)
+            slack_message = message.model_copy(deep=True)
             tasks.append(send_message_to_slack(slack_message))
 
         if message.creds.discord:
-            discord_message = message.copy(deep=True)
+            discord_message = message.model_copy(deep=True)
             tasks.append(send_message_to_discord(discord_message))
 
         if message.creds.email:
-            email_message = message.copy(deep=True)
+            email_message = message.model_copy(deep=True)
             tasks.append(send_email(email_message))
 
         if not tasks:

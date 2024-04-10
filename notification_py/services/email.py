@@ -56,7 +56,7 @@ def _update_message(message: Message) -> Message:
     message.message_details.title = (
         f"{message.message_details.title} - "
         f"{message.message_details.source} | "
-        f"Severity: {message.message_details.severity}"
+        f"Severity: {message.message_details.severity+1}"
     )
     if not message.creds.email:
         raise ValueError("Email credentials not provided.")
