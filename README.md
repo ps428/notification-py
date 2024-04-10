@@ -131,11 +131,11 @@ target_email = "RECIPIENT_ID@gmail.com"
 
 ## Sample notifications
 ### 1. Discord
-![Sample Discord Notifications](./screenshots/discord.png)
+![Sample Discord Notifications](https://github.com/ps428/notification-py/blob/main/screenshots/discord.png)
 ### 2. Slack
-![Sample Slack Notifications](./screenshots/slack.png)
+![Sample Slack Notifications](https://github.com/ps428/notification-py/blob/main/screenshots/slack.png)
 ### 3. Email
-![Sample Email Notifications](./screenshots/email.png)
+![Sample Email Notifications](https://github.com/ps428/notification-py/blob/main/screenshots/email.png)
 
 
 # Contact me
