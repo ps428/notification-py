@@ -9,7 +9,6 @@ from notification_py.custom_types import (
 async def send_message_to_slack(message: Message) -> BasicAPIResponse:
     try:
         if message.creds and message.creds.slack:
-            message = _update_message_for_slack(message)
 
             if not message.creds.slack:
                 return BasicAPIResponse(
@@ -23,14 +22,25 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
             data = {
                 "attachments": [
                     {
-                        "fallback": message.message_details.title,
+                        "fallback": (
+                            f"New Alert - Severity:"
+                            f" {message.message_details.severity+1}"
+                        ),
                         "color": _get_color_for_severity(
                             message.message_details.severity
                         ),
-                        "pretext": message.message_details.title,
-                        "title": message.message_details.source,
+                        "pretext": (
+                            f"New Alert - Severity:"
+                            f" {message.message_details.severity+1}"
+                        ),
+                        "title": message.message_details.title,
                         "text": f"<!channel>,\n{message.message_details.text}",
                         "fields": [
+                            {
+                                "title": "Source",
+                                "value": message.message_details.source,
+                                "short": False,
+                            },
                             {
                                 "title": "Filename",
                                 "value": message.message_details.filename,
@@ -76,13 +86,6 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
             )
     except Exception as e:
         return BasicAPIResponse(success=False, message=None, error=str(e))
-
-
-def _update_message_for_slack(message: Message) -> Message:
-    message.message_details.title = (
-        f"New Alert - Severity: {message.message_details.severity+1}"
-    )
-    return message
 
 
 def _get_color_for_severity(severity: SeverityLiteral) -> str:

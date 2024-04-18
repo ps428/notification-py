@@ -19,12 +19,12 @@ webhook_url = os.getenv("SLACK_WEBHOOK_URL") or ""
 async def test_send_message_to_slack():
     message = Message(
         message_details=MessageDetails(
-            title="Test Title",
-            text="Test Text",
-            severity=2,
-            source="Test Source",
-            filename="Test Filename",
-            line_number=0,
+            title="No Food!",
+            text="Pizza is out of stock. This is critical!",
+            severity=4,
+            source="Pizza Store",
+            filename="pizza.py",
+            line_number=23,
             time=datetime.now(),
         ),
         creds=Creds(

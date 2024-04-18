@@ -1,6 +1,9 @@
 # notification-py
 `notification-py` is a Python package that provides a simple and convenient way to send notifications to Discord, Slack, and Email. You can send notification to either of these using a single command.
 
+- Total Downloads: [![Downloads](https://static.pepy.tech/badge/notification-py)](https://pepy.tech/project/notification-py)
+- Monthly Downloads: [![Downloads](https://static.pepy.tech/badge/notification-py/month)](https://pepy.tech/project/notification-py)
+
 
 ## Motivation
 Lately I noticed several critical errors poping up in my python backend, I thought of a simple way to get notified about these failues (be it Stripe webhooks or anything else). So I came up with this idea to create a simple notification package which can be imported and used when unexpected errors are thrown by code.
