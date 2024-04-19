@@ -24,14 +24,14 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
                     {
                         "fallback": (
                             f"New Alert - Severity:"
-                            f" {message.message_details.severity+1}"
+                            f" {message.message_details.severity}"
                         ),
                         "color": _get_color_for_severity(
                             message.message_details.severity
                         ),
                         "pretext": (
                             f"New Alert - Severity:"
-                            f" {message.message_details.severity+1}"
+                            f" {message.message_details.severity}"
                         ),
                         "title": message.message_details.title,
                         "text": f"<!channel>,\n{message.message_details.text}",
@@ -91,11 +91,12 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
 def _get_color_for_severity(severity: SeverityLiteral) -> str:
     severity_colors = {
         0: "#00FF00",  # Green
-        1: "#00FFFF",  # Cyan
+        1: "#0000FF",  # Blue
         2: "#FFFF00",  # Yellow
         3: "#FF8C00",  # Orange
         4: "#FF0000",  # Red
+        5: "#000000",  # Black
     }
     return severity_colors.get(
-        severity, "#000000"
+        severity, "#FFFFFF"
     )  # Default to black if severity is not recognized

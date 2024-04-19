@@ -23,9 +23,7 @@ async def send_message_to_discord(message: Message) -> BasicAPIResponse:
                     f"https://discord.com/api/channels/"
                     f"{message.creds.discord.channel_id}/messages"
                 )
-                headers = {
-                    "Authorization": f"Bot {message.creds.discord.token}"
-                }
+                headers = {"Authorization": f"Bot {message.creds.discord.token}"}
                 data = {
                     "embeds": [
                         {
@@ -104,7 +102,7 @@ def _update_message(message: Message) -> Message:
     message.message_details.title = (
         f"{message.message_details.title} - "
         f"{message.message_details.source} | "
-        f"Severity: {message.message_details.severity+1}"
+        f"Severity: {message.message_details.severity}"
     )
     if not message.creds.discord:
         raise ValueError("Discord credentials not provided.")
@@ -114,14 +112,16 @@ def _update_message(message: Message) -> Message:
 
 def _get_color_for_severity(severity: SeverityLiteral) -> int:
     if severity == 0:
-        return 5763719
+        return 65280
     elif severity == 1:
-        return 5793266
+        return 255
     elif severity == 2:
-        return 16705372
+        return 16776960
     elif severity == 3:
-        return 15418782
+        return 16753920
     elif severity == 4:
-        return 15548997
+        return 16711680
+    elif severity == 5:
+        return 0
     else:
-        return 0x000000
+        return 16777215

@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional, Literal
 
-SeverityLiteral = Literal[0, 1, 2, 3, 4]
+SeverityLiteral = Literal[0, 1, 2, 3, 4, 5]
 
 
 class EmailCreds(BaseModel):
