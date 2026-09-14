@@ -7,6 +7,7 @@ from notification_py.custom_types import (
     EmailCreds,
     MessageDetails,
     SlackCreds,
+    TeamsCreds,
 )
 from datetime import datetime
 from dotenv import load_dotenv
@@ -27,6 +28,8 @@ team_id = os.getenv("DISCORD_TEAM_ID") or 0
 
 
 webhook_url = os.getenv("SLACK_WEBHOOK_URL") or ""
+
+teams_webhook_url = os.getenv("TEAMS_WEBHOOK_URL") or ""
 
 
 @pytest.mark.asyncio
@@ -62,6 +65,7 @@ async def test_notification():
                 smtp_port=int(smtp_port),
                 target_email=target_email,
             ),
+            teams=TeamsCreds(webhook_url=teams_webhook_url),
         ),
     )
     result = await send_notification(message)
@@ -79,6 +83,10 @@ async def test_notification():
     assert result.email is not None
     assert result.email.error is None
     assert result.email.success is True
+
+    assert result.teams is not None
+    assert result.teams.error is None
+    assert result.teams.success is True
 
 
 @pytest.mark.asyncio

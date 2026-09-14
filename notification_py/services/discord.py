@@ -35,28 +35,7 @@ async def send_message_to_discord(message: Message) -> BasicAPIResponse:
                             "color": _get_color_for_severity(
                                 message.message_details.severity
                             ),
-                            "fields": [
-                                {
-                                    "name": "Error Source",
-                                    "value": message.message_details.source,
-                                },
-                                {
-                                    "name": "Filename",
-                                    "value": message.message_details.filename,
-                                },
-                                {
-                                    "name": "Line number",
-                                    "value": str(
-                                        message.message_details.line_number
-                                    ),  # noqa
-                                },
-                                {
-                                    "name": "Time",
-                                    "value": message.message_details.time.strftime(  # noqa
-                                        "%Y-%m-%d %H:%M:%S"
-                                    ),
-                                },
-                            ],
+                            "fields": _build_discord_fields(message),
                         }
                     ]
                 }
@@ -96,6 +75,38 @@ async def send_message_to_discord(message: Message) -> BasicAPIResponse:
         message=None,
         error="Failed to send message to Discord",
     )
+
+
+def _build_discord_fields(message: Message) -> list:
+    fields = [
+        {
+            "name": "Source",
+            "value": message.message_details.source,
+        },
+    ]
+    if message.message_details.filename is not None:
+        fields.append(
+            {
+                "name": "Filename",
+                "value": message.message_details.filename,
+            }
+        )
+    if message.message_details.line_number is not None:
+        fields.append(
+            {
+                "name": "Line number",
+                "value": str(message.message_details.line_number),
+            }
+        )
+    fields.append(
+        {
+            "name": "Time",
+            "value": message.message_details.time.strftime(
+                "%Y-%m-%d %H:%M:%S"
+            ),
+        }
+    )
+    return fields
 
 
 def _update_message(message: Message) -> Message:

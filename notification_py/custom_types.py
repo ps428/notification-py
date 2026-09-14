@@ -23,10 +23,15 @@ class SlackCreds(BaseModel):
     webhook_url: str
 
 
+class TeamsCreds(BaseModel):
+    webhook_url: str
+
+
 class Creds(BaseModel):
-    discord: Optional[DiscordCreds]
-    slack: Optional[SlackCreds]
-    email: Optional[EmailCreds]
+    discord: Optional[DiscordCreds] = None
+    slack: Optional[SlackCreds] = None
+    email: Optional[EmailCreds] = None
+    teams: Optional[TeamsCreds] = None
 
 
 class MessageDetails(BaseModel):
@@ -34,8 +39,8 @@ class MessageDetails(BaseModel):
     text: str
     severity: SeverityLiteral
     source: str
-    filename: str
-    line_number: int
+    filename: Optional[str] = None
+    line_number: Optional[int] = None
     time: datetime
 
 
@@ -54,3 +59,4 @@ class NotificationResponse(BasicAPIResponse):
     slack: Optional[BasicAPIResponse] = None
     discord: Optional[BasicAPIResponse] = None
     email: Optional[BasicAPIResponse] = None
+    teams: Optional[BasicAPIResponse] = None
