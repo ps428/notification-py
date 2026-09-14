@@ -26,8 +26,10 @@ async def send_email(message: Message) -> BasicAPIResponse:
     # Create the body of the email
     body = f"Severity: {message.message_details.severity}\n"
     body += f"Source: {message.message_details.source}\n"
-    body += f"Filename: {message.message_details.filename}\n"
-    body += f"Line Number: {message.message_details.line_number}\n"
+    if message.message_details.filename is not None:
+        body += f"Filename: {message.message_details.filename}\n"
+    if message.message_details.line_number is not None:
+        body += f"Line Number: {message.message_details.line_number}\n"
     body += f"Description: {message.message_details.text}\n"
     body += f"Time: {message.message_details.time}\n\n"
 

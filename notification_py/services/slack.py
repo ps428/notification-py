@@ -35,32 +35,7 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
                         ),
                         "title": message.message_details.title,
                         "text": f"<!channel>,\n{message.message_details.text}",
-                        "fields": [
-                            {
-                                "title": "Source",
-                                "value": message.message_details.source,
-                                "short": False,
-                            },
-                            {
-                                "title": "Filename",
-                                "value": message.message_details.filename,
-                                "short": True,
-                            },
-                            {
-                                "title": "Line number",
-                                "value": str(
-                                    message.message_details.line_number
-                                ),  # noqa
-                                "short": True,
-                            },
-                            {
-                                "title": "Time",
-                                "value": message.message_details.time.strftime(
-                                    "%Y-%m-%d %H:%M:%S"
-                                ),
-                                "short": False,
-                            },
-                        ],
+                        "fields": _build_slack_fields(message),
                     }
                 ]
             }
@@ -86,6 +61,42 @@ async def send_message_to_slack(message: Message) -> BasicAPIResponse:
             )
     except Exception as e:
         return BasicAPIResponse(success=False, message=None, error=str(e))
+
+
+def _build_slack_fields(message: Message) -> list:
+    fields = [
+        {
+            "title": "Source",
+            "value": message.message_details.source,
+            "short": False,
+        },
+    ]
+    if message.message_details.filename is not None:
+        fields.append(
+            {
+                "title": "Filename",
+                "value": message.message_details.filename,
+                "short": True,
+            }
+        )
+    if message.message_details.line_number is not None:
+        fields.append(
+            {
+                "title": "Line number",
+                "value": str(message.message_details.line_number),
+                "short": True,
+            }
+        )
+    fields.append(
+        {
+            "title": "Time",
+            "value": message.message_details.time.strftime(
+                "%Y-%m-%d %H:%M:%S"
+            ),
+            "short": False,
+        }
+    )
+    return fields
 
 
 def _get_color_for_severity(severity: SeverityLiteral) -> str:

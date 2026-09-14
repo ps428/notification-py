@@ -1,5 +1,5 @@
 # notification-py
-`notification-py` is a Python package that provides a simple and convenient way to send notifications to Discord, Slack, and Email. You can send notification to either of these using a single command.
+`notification-py` is a Python package that provides a simple and convenient way to send notifications to Discord, Slack, MS Teams, and Email. You can send notification to either of these using a single command.
 
 - Total Downloads: [![Downloads](https://static.pepy.tech/badge/notification-py)](https://pepy.tech/project/notification-py)
 - Monthly Downloads: [![Downloads](https://static.pepy.tech/badge/notification-py/month)](https://pepy.tech/project/notification-py)
@@ -8,7 +8,7 @@
 ## Motivation
 Lately I noticed several critical errors poping up in my python backend, I thought of a simple way to get notified about these failues (be it Stripe webhooks or anything else). So I came up with this idea to create a simple notification package which can be imported and used when unexpected errors are thrown by code.
 
-> Using this package, developers can receive notifications through various combinations of Discord, Slack, and Email. The package supports sending notifications to all three platforms simultaneously, any two of them, or just one platform, depending on the provided credentials and configuration. This flexibility allows developers to customize their notification setup based on their specific requirements and preferences.
+> Using this package, developers can receive notifications through various combinations of Discord, Slack, MS Teams, and Email. The package supports sending notifications to all platforms simultaneously, any combination of them, or just one platform, depending on the provided credentials and configuration. This flexibility allows developers to customize their notification setup based on their specific requirements and preferences.
 
 
 
@@ -33,11 +33,15 @@ from notification_py.custom_types import (
     EmailCreds,
     MessageDetails,
     SlackCreds,
+    TeamsCreds,
 )       
 ```
 
 ### 2. Creating Message Object:
 `Message` object is core to the functionality of the `notification-py` package.
+
+> `filename` and `line_number` are optional — you can send generic notifications (e.g. "Customer onboarded") without them, not just code error alerts.
+
 ```
 message = Message(
     message_details=MessageDetails(
@@ -56,6 +60,7 @@ message = Message(
             team_id=your_discord_team_id,
         ),
         slack=SlackCreds(webhook_url="your_slack_webhook_url"),
+        teams=TeamsCreds(webhook_url="your_teams_webhook_url"),
         email=EmailCreds(
             email="your_email",
             password="your_email_password",
@@ -69,19 +74,17 @@ message = Message(
 
 The Message object consists of two main parts:
 
-1. `message_details`: An instance of `MessageDetails` that contains the details of the notification message, such as the title, text, severity, source, filename, line number, and timestamp.
-2. `creds`: An instance of `Creds` that holds the credentials for Discord, Slack, and email notifications.
+1. `message_details`: An instance of `MessageDetails` that contains the details of the notification message, such as the title, text, severity, source, and timestamp. `filename` and `line_number` are optional.
+2. `creds`: An instance of `Creds` that holds the credentials for Discord, Slack, MS Teams, and email notifications.
 
 > These creds are independent of each other and one can just send Discord notifications using this message object (same applies for other combinations of these):
 ```
 message = Message(
     message_details=MessageDetails(
-        title="Test Title",
-        text="Test Text",
-        severity=2,
-        source="Test Source",
-        filename="Test Filename",
-        line_number=0,
+        title="Customer Onboarded",
+        text="Acme Corp has been successfully onboarded.",
+        severity=0,
+        source="CRM System",
         time=datetime.now(),
     ),
     creds=Creds(
@@ -90,8 +93,6 @@ message = Message(
             channel_id=your_discord_channel_id,
             team_id=your_discord_team_id,
         ),
-        slack=None,
-        email=None,
     ),
 )
 
@@ -116,11 +117,22 @@ To send notifications to Discord, Slack, and email, you need to provide the nece
 2. Once you have the token and the bot is installed on your Discord server, just get your channel id and id of the [role](https://support.discord.com/hc/en-us/articles/214836687-Role-Management-101) that you want to notify for the notification.
 
 ### 2. Slack:
-1. Just go to [apps](https://api.slack.com/apps) and create a new app for your workspace.
-2. Once app is created, select the channel to enable the webhooks on this [url](https://api.slack.com/apps/A06S2HTV53L/incoming-webhooks)
-3. Copy that webhooks url and it's gtg.
+1. Go to [Slack Apps](https://api.slack.com/apps) and click **Create New App**.
+2. Choose **From scratch**, give it a name, and select your workspace.
+3. In the app settings, go to **Incoming Webhooks** (under Features) and toggle it **On**.
+4. Click **Add New Webhook to Workspace**, select the channel you want to post to, and click **Allow**.
+5. Copy the generated webhook URL — that's your `webhook_url`.
 
-### 3. Email (for gmail):
+### 3. MS Teams:
+1. In Microsoft Teams, go to the channel where you want to receive notifications.
+2. Click **More options (...)** next to the channel and select **Workflows**.
+3. Search for and select the **Post to a channel when a webhook request is received** template.
+4. Configure the workflow parameters and click **Save**.
+5. Copy the generated webhook URL — that's your `webhook_url`.
+
+For more details, see [Send messages in Teams using incoming webhooks](https://support.microsoft.com/en-us/office/send-messages-in-teams-using-incoming-webhooks-323660ec-12ca-40b1-a1d3-a3df47e808c4).
+
+### 4. Email (for gmail):
 1. Make sure you have 2FA enabled.
 2. Just follow along [this discussion](https://support.google.com/accounts/answer/185833?hl=en) to get your `app password` 
 3. Once that is done, save the generated password and create email creds like this:
